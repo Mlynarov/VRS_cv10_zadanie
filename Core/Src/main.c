@@ -31,13 +31,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-void proccesDmaData(uint8_t* sign,uint16_t len);
-void calculateMemory();
-void sendData(uint8_t* data,uint16_t len);
-void pwmToLed(uint8_t* sign,uint16_t len);
-int checkMode(uint8_t* sign,uint16_t len);
-char *convert (uint8_t *a);
-char *toString(uint8_t* sign,uint16_t len);
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,7 +48,6 @@ char *toString(uint8_t* sign,uint16_t len);
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE BEGIN PV */
 int mode =2;
 /* USER CODE END PV */
@@ -63,7 +55,12 @@ int mode =2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+void proccesDmaData(uint8_t* sign,uint16_t len);
+void sendData(uint8_t* data,uint16_t len);
+void pwmToLed(uint8_t* sign,uint16_t len);
+int checkMode(uint8_t* sign,uint16_t len);
+char *convert (uint8_t *a);
+char *toString(uint8_t* sign,uint16_t len);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -116,8 +113,6 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  calculateMemory();
-	  LL_mDelay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -217,22 +212,6 @@ void sendData(uint8_t* data,uint16_t len)
 	USART2_PutBuffer(data, len);
 }
 
-void calculateMemory()
-{
-	uint16_t size;
-	uint16_t occupied;
-	uint8_t *tx_data;
-	uint16_t len_data;
-	int percent = 0;
-
-
-	size = DMA_USART2_BUFFER_SIZE;
-	occupied = DMA_USART2_BUFFER_SIZE - LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6);
-	percent = 100.0/size*occupied;
-	//len_data = asprintf(&tx_data, "Buffer capacity: %3d bytes, occupied memory: %3d bytes, load [in ~%%]: %3d%%\n\r",size,occupied,percent);
-	//sendData(tx_data,len_data);
-	//free(tx_data);
-}
 /* USER CODE END 4 */
 
 /**
