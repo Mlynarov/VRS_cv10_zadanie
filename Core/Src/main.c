@@ -19,17 +19,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
-/* Private includes ----------------------------------------------------------*/
 #include "dma.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-/* USER CODE BEGIN Includes */
+
 void proccesDmaData(uint8_t* sign,uint16_t len);
 void calculateMemory();
 void sendData(uint8_t* data,uint16_t len);
