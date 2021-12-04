@@ -50,7 +50,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t mode = 2;
+uint8_t mode = 1;
 uint8_t dutyCycle = 100;
 uint8_t wantedDutyCycle = 0;
 uint8_t fadeMode = 0;
@@ -62,7 +62,7 @@ void SystemClock_Config(void);
 void proccesDmaData(uint8_t* sign,uint16_t len);
 void sendData(uint8_t* data,uint16_t len);
 void pwmToLed(uint8_t* sign,uint16_t len);
-void checkMode(uint8_t* sign,uint16_t len);
+void changeMode(uint8_t newMode);
 void setDutyCycle(uint8_t D);
 /* USER CODE END PFP */
 
@@ -161,7 +161,25 @@ void SystemClock_Config(void)
 
 /* USER CODE BEGIN 4 */
 void proccesDmaData(uint8_t* sign,uint16_t len){
-	checkMode(sign,len);
+	uint8_t *tx_data;
+	char str[len];
+	for(int j=0;j<len;j++){
+		str[j] = *(sign+j);
+	}
+	if(strstr(str,"$auto$")){
+		changeMode(1);
+	}
+	else if(strstr(str,"$manual$")){
+		changeMode(2);
+	}
+	else if(strstr(str,"$PWM")){
+		pwmToLed(sign,len);
+	}
+	else{
+		int len_data = asprintf(&tx_data, "\n\rInvalid command\n\rValid command:\n\r$auto$ - automatic mode\n\r$manual$ - manual mode\n\r$PWMxx$ - PWM settings in manual mode\n\rMode is %d - 1(automatic) 2(manual)\n\r",mode);
+		sendData(tx_data,len_data);
+		free(tx_data);
+	}
 }
 
 void sendData(uint8_t* data,uint16_t len){
@@ -175,44 +193,38 @@ void pwmToLed(uint8_t* sign,uint16_t len){
 		str[j] = *(sign+j);
 	}
 	char breakset[] = "0123456789";
-	if(strstr(str,"$PWM")){
+	if(strstr(str,"$PWM") && ((*(strpbrk(str, breakset)+1) == '$') || (*(strpbrk(str, breakset)+2) == '$') || (*(strpbrk(str, breakset)+3) == '$'))){
 		wantedDutyCycle = atoi(strpbrk(str, breakset));
 		int len_data = asprintf(&tx_data, "The brightness is set to: : %d %\n\r",wantedDutyCycle);
 		sendData(tx_data,len_data);
 		free(tx_data);
 	}
+	else{
+		int len_data = asprintf(&tx_data, "End char '$' not found%\n\r");
+		sendData(tx_data,len_data);
+		free(tx_data);
+	}
 }
 
-void checkMode(uint8_t* sign,uint16_t len){
+void changeMode(uint8_t newMode){
 	uint8_t *tx_data;
-	char str[len];
-	for(int j=0;j<len;j++){
-		str[j] = *(sign+j);
+	mode = newMode;
+	if (newMode == 1){
+		int len_data = asprintf(&tx_data, "Mode is set to:  automatic\n\r");
+		sendData(tx_data,len_data);
+		free(tx_data);
 	}
-	if(strstr(str,"$auto$")){
-		mode = 1;
+	else if (newMode == 2){
+		LL_mDelay(50);
+		int len_data = asprintf(&tx_data, "Mode is set to:  manual\n\r");
+		sendData(tx_data,len_data);
+		free(tx_data);
 	}
-	else if(strstr(str,"$manual$")){
-		mode = 2;
+	else{
+		int len_data = asprintf(&tx_data, "Mode is set to:  none\n\r");
+		sendData(tx_data,len_data);
+		free(tx_data);
 	}
-	if (mode == 1){
-			int len_data = asprintf(&tx_data, "Mode is set to:  automatic\n\r");
-			sendData(tx_data,len_data);
-			free(tx_data);
-		}
-		if (mode == 2){
-			pwmToLed(sign,len);
-			LL_mDelay(50);
-			int len_data = asprintf(&tx_data, "Mode is set to:  manual\n\r");
-			sendData(tx_data,len_data);
-			free(tx_data);
-		}
-
-		if (mode == 0){
-			int len_data = asprintf(&tx_data, "Mode is set to:  none\n\r");
-			sendData(tx_data,len_data);
-			free(tx_data);
-		}
 	return;
 }
 
