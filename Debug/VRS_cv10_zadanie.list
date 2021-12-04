@@ -7,19 +7,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   1 .text         000037c8  08000190  08000190  00010190  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       000002d0  08003958  08003958  00013958  2**2
+  2 .rodata       000002d4  08003958  08003958  00013958  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM.extab    00000000  08003c28  08003c28  0002006c  2**0
+  3 .ARM.extab    00000000  08003c2c  08003c2c  0002006c  2**0
                   CONTENTS
-  4 .ARM          00000000  08003c28  08003c28  0002006c  2**0
+  4 .ARM          00000000  08003c2c  08003c2c  0002006c  2**0
                   CONTENTS
-  5 .preinit_array 00000000  08003c28  08003c28  0002006c  2**0
+  5 .preinit_array 00000000  08003c2c  08003c2c  0002006c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  6 .init_array   00000004  08003c28  08003c28  00013c28  2**2
+  6 .init_array   00000004  08003c2c  08003c2c  00013c2c  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  7 .fini_array   00000004  08003c2c  08003c2c  00013c2c  2**2
+  7 .fini_array   00000004  08003c30  08003c30  00013c30  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  8 .data         0000006c  20000000  08003c30  00020000  2**2
+  8 .data         0000006c  20000000  08003c34  00020000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
   9 .ccmram       00000000  10000000  10000000  0002006c  2**0
                   CONTENTS
@@ -1139,7 +1139,7 @@ void proccesDmaData(uint8_t* sign,uint16_t len){
  8000846:	e014      	b.n	8000872 <proccesDmaData+0xf2>
 	}
 	else{
-		int len_data = asprintf(&tx_data, "\n\rInvalid command\n\rValid command:\n\r$auto$ - automatic mode\n\r$manual$ - manual mode\n\r$PWMxx$ - PWM settings in manual mode\n\rMode is %d - 1(automatic) 2(manual)",mode);
+		int len_data = asprintf(&tx_data, "\n\rInvalid command\n\rValid command:\n\r$auto$ - automatic mode\n\r$manual$ - manual mode\n\r$PWMxx$ - PWM settings in manual mode\n\rMode is %d - 1(automatic) 2(manual)\n\r",mode);
  8000848:	4b0f      	ldr	r3, [pc, #60]	; (8000888 <proccesDmaData+0x108>)
  800084a:	781b      	ldrb	r3, [r3, #0]
  800084c:	461a      	mov	r2, r3
@@ -1364,11 +1364,11 @@ void pwmToLed(uint8_t* sign,uint16_t len){
  8000a0a:	46bd      	mov	sp, r7
  8000a0c:	bdb0      	pop	{r4, r5, r7, pc}
  8000a0e:	bf00      	nop
- 8000a10:	08003a54 	.word	0x08003a54
+ 8000a10:	08003a58 	.word	0x08003a58
  8000a14:	0800396c 	.word	0x0800396c
  8000a18:	20000088 	.word	0x20000088
- 8000a1c:	08003a14 	.word	0x08003a14
- 8000a20:	08003a38 	.word	0x08003a38
+ 8000a1c:	08003a18 	.word	0x08003a18
+ 8000a20:	08003a3c 	.word	0x08003a3c
 
 08000a24 <changeMode>:
 
@@ -1462,9 +1462,9 @@ void changeMode(uint8_t newMode){
  8000abc:	bd80      	pop	{r7, pc}
  8000abe:	bf00      	nop
  8000ac0:	20000000 	.word	0x20000000
- 8000ac4:	08003a60 	.word	0x08003a60
- 8000ac8:	08003a80 	.word	0x08003a80
- 8000acc:	08003a9c 	.word	0x08003a9c
+ 8000ac4:	08003a64 	.word	0x08003a64
+ 8000ac8:	08003a84 	.word	0x08003a84
+ 8000acc:	08003aa0 	.word	0x08003aa0
 
 08000ad0 <changeLedPWM>:
 
@@ -1638,7 +1638,7 @@ __STATIC_INLINE void LL_DMA_DisableChannel(DMA_TypeDef *DMAx, uint32_t Channel)
  8000be4:	f85d 7b04 	ldr.w	r7, [sp], #4
  8000be8:	4770      	bx	lr
  8000bea:	bf00      	nop
- 8000bec:	08003ab4 	.word	0x08003ab4
+ 8000bec:	08003ab8 	.word	0x08003ab8
 
 08000bf0 <LL_DMA_IsActiveFlag_TC6>:
   * @rmtoll ISR          TCIF6         LL_DMA_IsActiveFlag_TC6
@@ -2622,8 +2622,8 @@ void SystemInit(void)
  8001130:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001134:	4770      	bx	lr
  8001136:	bf00      	nop
- 8001138:	08003ad4 	.word	0x08003ad4
- 800113c:	08003ae0 	.word	0x08003ae0
+ 8001138:	08003ad8 	.word	0x08003ad8
+ 800113c:	08003ae4 	.word	0x08003ae4
 
 08001140 <LL_TIM_OC_EnablePreload>:
 {
@@ -2702,8 +2702,8 @@ void SystemInit(void)
  80011d0:	46bd      	mov	sp, r7
  80011d2:	f85d 7b04 	ldr.w	r7, [sp], #4
  80011d6:	4770      	bx	lr
- 80011d8:	08003ad4 	.word	0x08003ad4
- 80011dc:	08003ae0 	.word	0x08003ae0
+ 80011d8:	08003ad8 	.word	0x08003ad8
+ 80011dc:	08003ae4 	.word	0x08003ae4
 
 080011e0 <LL_TIM_SetClockSource>:
 {
@@ -3122,7 +3122,7 @@ void MX_TIM2_Init(void)
  80014c4:	f85d 7b04 	ldr.w	r7, [sp], #4
  80014c8:	4770      	bx	lr
  80014ca:	bf00      	nop
- 80014cc:	08003aec 	.word	0x08003aec
+ 80014cc:	08003af0 	.word	0x08003af0
 
 080014d0 <LL_DMA_SetDataTransferDirection>:
 {
@@ -3161,7 +3161,7 @@ void MX_TIM2_Init(void)
  8001510:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001514:	4770      	bx	lr
  8001516:	bf00      	nop
- 8001518:	08003aec 	.word	0x08003aec
+ 8001518:	08003af0 	.word	0x08003af0
 
 0800151c <LL_DMA_GetDataTransferDirection>:
 {
@@ -3187,7 +3187,7 @@ void MX_TIM2_Init(void)
  8001540:	46bd      	mov	sp, r7
  8001542:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001546:	4770      	bx	lr
- 8001548:	08003aec 	.word	0x08003aec
+ 8001548:	08003af0 	.word	0x08003af0
 
 0800154c <LL_DMA_SetMode>:
 {
@@ -3225,7 +3225,7 @@ void MX_TIM2_Init(void)
  8001588:	f85d 7b04 	ldr.w	r7, [sp], #4
  800158c:	4770      	bx	lr
  800158e:	bf00      	nop
- 8001590:	08003aec 	.word	0x08003aec
+ 8001590:	08003af0 	.word	0x08003af0
 
 08001594 <LL_DMA_SetPeriphIncMode>:
 {
@@ -3263,7 +3263,7 @@ void MX_TIM2_Init(void)
  80015d0:	f85d 7b04 	ldr.w	r7, [sp], #4
  80015d4:	4770      	bx	lr
  80015d6:	bf00      	nop
- 80015d8:	08003aec 	.word	0x08003aec
+ 80015d8:	08003af0 	.word	0x08003af0
 
 080015dc <LL_DMA_SetMemoryIncMode>:
 {
@@ -3301,7 +3301,7 @@ void MX_TIM2_Init(void)
  8001618:	f85d 7b04 	ldr.w	r7, [sp], #4
  800161c:	4770      	bx	lr
  800161e:	bf00      	nop
- 8001620:	08003aec 	.word	0x08003aec
+ 8001620:	08003af0 	.word	0x08003af0
 
 08001624 <LL_DMA_SetPeriphSize>:
 {
@@ -3339,7 +3339,7 @@ void MX_TIM2_Init(void)
  8001660:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001664:	4770      	bx	lr
  8001666:	bf00      	nop
- 8001668:	08003aec 	.word	0x08003aec
+ 8001668:	08003af0 	.word	0x08003af0
 
 0800166c <LL_DMA_SetMemorySize>:
 {
@@ -3377,7 +3377,7 @@ void MX_TIM2_Init(void)
  80016a8:	f85d 7b04 	ldr.w	r7, [sp], #4
  80016ac:	4770      	bx	lr
  80016ae:	bf00      	nop
- 80016b0:	08003aec 	.word	0x08003aec
+ 80016b0:	08003af0 	.word	0x08003af0
 
 080016b4 <LL_DMA_SetChannelPriorityLevel>:
 {
@@ -3415,7 +3415,7 @@ void MX_TIM2_Init(void)
  80016f0:	f85d 7b04 	ldr.w	r7, [sp], #4
  80016f4:	4770      	bx	lr
  80016f6:	bf00      	nop
- 80016f8:	08003aec 	.word	0x08003aec
+ 80016f8:	08003af0 	.word	0x08003af0
 
 080016fc <LL_DMA_SetDataLength>:
 {
@@ -3454,7 +3454,7 @@ void MX_TIM2_Init(void)
  8001738:	f85d 7b04 	ldr.w	r7, [sp], #4
  800173c:	4770      	bx	lr
  800173e:	bf00      	nop
- 8001740:	08003aec 	.word	0x08003aec
+ 8001740:	08003af0 	.word	0x08003af0
 
 08001744 <LL_DMA_GetDataLength>:
 {
@@ -3479,7 +3479,7 @@ void MX_TIM2_Init(void)
  8001764:	46bd      	mov	sp, r7
  8001766:	f85d 7b04 	ldr.w	r7, [sp], #4
  800176a:	4770      	bx	lr
- 800176c:	08003aec 	.word	0x08003aec
+ 800176c:	08003af0 	.word	0x08003af0
 
 08001770 <LL_DMA_ConfigAddresses>:
 {
@@ -3547,7 +3547,7 @@ void MX_TIM2_Init(void)
  80017dc:	f85d 7b04 	ldr.w	r7, [sp], #4
  80017e0:	4770      	bx	lr
  80017e2:	bf00      	nop
- 80017e4:	08003aec 	.word	0x08003aec
+ 80017e4:	08003af0 	.word	0x08003af0
 
 080017e8 <LL_DMA_SetMemoryAddress>:
 {
@@ -3574,7 +3574,7 @@ void MX_TIM2_Init(void)
  800180c:	46bd      	mov	sp, r7
  800180e:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001812:	4770      	bx	lr
- 8001814:	08003aec 	.word	0x08003aec
+ 8001814:	08003af0 	.word	0x08003af0
 
 08001818 <LL_DMA_SetPeriphAddress>:
 {
@@ -3601,7 +3601,7 @@ void MX_TIM2_Init(void)
  800183c:	46bd      	mov	sp, r7
  800183e:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001842:	4770      	bx	lr
- 8001844:	08003aec 	.word	0x08003aec
+ 8001844:	08003af0 	.word	0x08003af0
 
 08001848 <LL_DMA_EnableIT_TC>:
   *         @arg @ref LL_DMA_CHANNEL_6
@@ -3640,7 +3640,7 @@ __STATIC_INLINE void LL_DMA_EnableIT_TC(DMA_TypeDef *DMAx, uint32_t Channel)
  800187c:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001880:	4770      	bx	lr
  8001882:	bf00      	nop
- 8001884:	08003aec 	.word	0x08003aec
+ 8001884:	08003af0 	.word	0x08003af0
 
 08001888 <LL_DMA_EnableIT_HT>:
   *         @arg @ref LL_DMA_CHANNEL_6
@@ -3679,7 +3679,7 @@ __STATIC_INLINE void LL_DMA_EnableIT_HT(DMA_TypeDef *DMAx, uint32_t Channel)
  80018bc:	f85d 7b04 	ldr.w	r7, [sp], #4
  80018c0:	4770      	bx	lr
  80018c2:	bf00      	nop
- 80018c4:	08003aec 	.word	0x08003aec
+ 80018c4:	08003af0 	.word	0x08003af0
 
 080018c8 <LL_DMA_EnableIT_TE>:
   *         @arg @ref LL_DMA_CHANNEL_6
@@ -3718,7 +3718,7 @@ __STATIC_INLINE void LL_DMA_EnableIT_TE(DMA_TypeDef *DMAx, uint32_t Channel)
  80018fc:	f85d 7b04 	ldr.w	r7, [sp], #4
  8001900:	4770      	bx	lr
  8001902:	bf00      	nop
- 8001904:	08003aec 	.word	0x08003aec
+ 8001904:	08003af0 	.word	0x08003af0
 
 08001908 <LL_AHB1_GRP1_EnableClock>:
 {
@@ -4629,7 +4629,7 @@ LoopForever:
   ldr r1, =_edata
  8001e2c:	2000006c 	.word	0x2000006c
   ldr r2, =_sidata
- 8001e30:	08003c30 	.word	0x08003c30
+ 8001e30:	08003c34 	.word	0x08003c34
   ldr r2, =_sbss
  8001e34:	2000006c 	.word	0x2000006c
   ldr r4, =_ebss
@@ -5597,7 +5597,7 @@ uint32_t RCC_GetHCLKClockFreq(uint32_t SYSCLK_Frequency)
  80023a2:	46bd      	mov	sp, r7
  80023a4:	bd80      	pop	{r7, pc}
  80023a6:	bf00      	nop
- 80023a8:	08003abc 	.word	0x08003abc
+ 80023a8:	08003ac0 	.word	0x08003ac0
 
 080023ac <RCC_GetPCLK1ClockFreq>:
   * @brief  Return PCLK1 clock frequency
@@ -5626,7 +5626,7 @@ uint32_t RCC_GetPCLK1ClockFreq(uint32_t HCLK_Frequency)
  80023ca:	46bd      	mov	sp, r7
  80023cc:	bd80      	pop	{r7, pc}
  80023ce:	bf00      	nop
- 80023d0:	08003acc 	.word	0x08003acc
+ 80023d0:	08003ad0 	.word	0x08003ad0
 
 080023d4 <RCC_GetPCLK2ClockFreq>:
   * @brief  Return PCLK2 clock frequency
@@ -5655,7 +5655,7 @@ uint32_t RCC_GetPCLK2ClockFreq(uint32_t HCLK_Frequency)
  80023f2:	46bd      	mov	sp, r7
  80023f4:	bd80      	pop	{r7, pc}
  80023f6:	bf00      	nop
- 80023f8:	08003acc 	.word	0x08003acc
+ 80023f8:	08003ad0 	.word	0x08003ad0
 
 080023fc <RCC_PLL_GetFreqDomain_SYS>:
 /**
@@ -7675,10 +7675,10 @@ void LL_SetSystemCoreClock(uint32_t HCLKFrequency)
  8002f6e:	4798      	blx	r3
  8002f70:	3601      	adds	r6, #1
  8002f72:	e7f2      	b.n	8002f5a <__libc_init_array+0x1e>
- 8002f74:	08003c28 	.word	0x08003c28
- 8002f78:	08003c28 	.word	0x08003c28
- 8002f7c:	08003c28 	.word	0x08003c28
- 8002f80:	08003c2c 	.word	0x08003c2c
+ 8002f74:	08003c2c 	.word	0x08003c2c
+ 8002f78:	08003c2c 	.word	0x08003c2c
+ 8002f7c:	08003c2c 	.word	0x08003c2c
+ 8002f80:	08003c30 	.word	0x08003c30
 
 08002f84 <free>:
  8002f84:	4b02      	ldr	r3, [pc, #8]	; (8002f90 <free+0xc>)
@@ -8132,11 +8132,11 @@ void LL_SetSystemCoreClock(uint32_t HCLKFrequency)
  8003394:	f000 f87a 	bl	800348c <_printf_i>
  8003398:	e7eb      	b.n	8003372 <_svfiprintf_r+0x1c2>
  800339a:	bf00      	nop
- 800339c:	08003af3 	.word	0x08003af3
- 80033a0:	08003afd 	.word	0x08003afd
+ 800339c:	08003af7 	.word	0x08003af7
+ 80033a0:	08003b01 	.word	0x08003b01
  80033a4:	00000000 	.word	0x00000000
  80033a8:	080030f9 	.word	0x080030f9
- 80033ac:	08003af9 	.word	0x08003af9
+ 80033ac:	08003afd 	.word	0x08003afd
 
 080033b0 <_printf_common>:
  80033b0:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -8472,8 +8472,8 @@ void LL_SetSystemCoreClock(uint32_t HCLKFrequency)
  80036c8:	f104 0619 	add.w	r6, r4, #25
  80036cc:	e7f5      	b.n	80036ba <_printf_i+0x22e>
  80036ce:	bf00      	nop
- 80036d0:	08003b04 	.word	0x08003b04
- 80036d4:	08003b15 	.word	0x08003b15
+ 80036d0:	08003b08 	.word	0x08003b08
+ 80036d4:	08003b19 	.word	0x08003b19
 
 080036d8 <_sbrk_r>:
  80036d8:	b538      	push	{r3, r4, r5, lr}
@@ -8646,7 +8646,7 @@ void LL_SetSystemCoreClock(uint32_t HCLKFrequency)
  800385a:	230a      	movs	r3, #10
  800385c:	e7ad      	b.n	80037ba <_strtol_l.isra.0+0x5e>
  800385e:	bf00      	nop
- 8003860:	08003b27 	.word	0x08003b27
+ 8003860:	08003b2b 	.word	0x08003b2b
 
 08003864 <strtol>:
  8003864:	4613      	mov	r3, r2
