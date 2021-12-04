@@ -48,8 +48,12 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+
 /* USER CODE BEGIN PV */
-int mode =2;
+uint8_t mode = 2;
+uint8_t dutyCycle = 100;
+uint8_t wantedDutyCycle = 0;
+uint8_t fadeMode = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,9 +62,8 @@ void SystemClock_Config(void);
 void proccesDmaData(uint8_t* sign,uint16_t len);
 void sendData(uint8_t* data,uint16_t len);
 void pwmToLed(uint8_t* sign,uint16_t len);
-int checkMode(uint8_t* sign,uint16_t len);
-char *convert (uint8_t *a);
-char *toString(uint8_t* sign,uint16_t len);
+void checkMode(uint8_t* sign,uint16_t len);
+void setDutyCycle(uint8_t D);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -107,6 +110,10 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   USART2_RegisterCallback(proccesDmaData);
+  LL_TIM_EnableIT_CC2(TIM2);
+  LL_TIM_EnableCounter(TIM2);
+  LL_TIM_CC_EnableChannel(TIM2, LL_TIM_CHANNEL_CH1);
+  LL_TIM_EnableCounter(TIM2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -153,47 +160,29 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-void proccesDmaData(uint8_t* sign,uint16_t len)
-{
-	uint8_t *tx_data;
-	mode=checkMode(sign,len);
+void proccesDmaData(uint8_t* sign,uint16_t len){
+	checkMode(sign,len);
+}
 
-
-	if (mode == 1){
-		int len_data = asprintf(&tx_data, "Mode is set to:  automatic\n\r");
-		sendData(tx_data,len_data);
-		free(tx_data);
-	}
-	if (mode == 2){
-		pwmToLed(sign,len);
-		LL_mDelay(50);
-		int len_data = asprintf(&tx_data, "Mode is set to:  manual\n\r");
-		sendData(tx_data,len_data);
-		free(tx_data);
-	}
-
-	if (mode == 0){
-		int len_data = asprintf(&tx_data, "Mode is set to:  none\n\r");
-		sendData(tx_data,len_data);
-		free(tx_data);
-	}
+void sendData(uint8_t* data,uint16_t len){
+	USART2_PutBuffer(data, len);
 }
 
 void pwmToLed(uint8_t* sign,uint16_t len){
 	uint8_t *tx_data;
-	int number=0;
 	char str[len];
 	for(int j=0;j<len;j++){
 		str[j] = *(sign+j);
 	}
 	char breakset[] = "0123456789";
-	number = atoi(strpbrk(str, breakset));
-	int len_data = asprintf(&tx_data, "The brightness is set to: : %d %\n\r",number);
+	wantedDutyCycle = atoi(strpbrk(str, breakset));
+	int len_data = asprintf(&tx_data, "The brightness is set to: : %d %\n\r",wantedDutyCycle);
 									sendData(tx_data,len_data);
 									free(tx_data);
 }
 
-int checkMode(uint8_t* sign,uint16_t len){
+void checkMode(uint8_t* sign,uint16_t len){
+	uint8_t *tx_data;
 	char str[len];
 	for(int j=0;j<len;j++){
 		str[j] = *(sign+j);
@@ -204,12 +193,55 @@ int checkMode(uint8_t* sign,uint16_t len){
 	else if(strstr(str,"$manual$")){
 		mode = 2;
 	}
-	return mode;
+	if (mode == 1){
+			int len_data = asprintf(&tx_data, "Mode is set to:  automatic\n\r");
+			sendData(tx_data,len_data);
+			free(tx_data);
+		}
+		if (mode == 2){
+			pwmToLed(sign,len);
+			LL_mDelay(50);
+			int len_data = asprintf(&tx_data, "Mode is set to:  manual\n\r");
+			sendData(tx_data,len_data);
+			free(tx_data);
+		}
+
+		if (mode == 0){
+			int len_data = asprintf(&tx_data, "Mode is set to:  none\n\r");
+			sendData(tx_data,len_data);
+			free(tx_data);
+		}
+	return;
 }
 
-void sendData(uint8_t* data,uint16_t len)
-{
-	USART2_PutBuffer(data, len);
+void changeLedPWM(){
+	if(mode == 1){
+		if(fadeMode == 0){
+				dutyCycle -= 1;
+				if(dutyCycle <= 0){
+					fadeMode = 1;
+				}
+			}
+			else if(fadeMode == 1){
+				dutyCycle += 1;
+				if (dutyCycle >= 100){
+					fadeMode = 0;
+				}
+			}
+	}
+	else if(mode == 2){
+		if(wantedDutyCycle < dutyCycle){
+			dutyCycle -=1;
+		}
+		else if(wantedDutyCycle > dutyCycle){
+			dutyCycle +=1;
+		}
+	}
+	setDutyCycle(dutyCycle);
+}
+
+void setDutyCycle(uint8_t D){
+	TIM2->CCR1 = ((TIM2->ARR) * D) / 100;
 }
 
 /* USER CODE END 4 */

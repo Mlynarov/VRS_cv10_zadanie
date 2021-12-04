@@ -253,7 +253,10 @@ void TIM2_IRQHandler(void)
 
   /* USER CODE END TIM2_IRQn 0 */
   /* USER CODE BEGIN TIM2_IRQn 1 */
-
+	if(LL_TIM_IsActiveFlag_CC2(TIM2)){
+		changeLedPWM();
+		LL_TIM_ClearFlag_CC2(TIM2);
+	}
   /* USER CODE END TIM2_IRQn 1 */
 }
 
