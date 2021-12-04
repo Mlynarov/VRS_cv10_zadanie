@@ -2869,8 +2869,8 @@ void MX_TIM2_Init(void)
   TIM_OC_InitStruct.OCNState = LL_TIM_OCSTATE_DISABLE;
  80012ee:	2300      	movs	r3, #0
  80012f0:	627b      	str	r3, [r7, #36]	; 0x24
-  TIM_OC_InitStruct.CompareValue = 100;
- 80012f2:	2364      	movs	r3, #100	; 0x64
+  TIM_OC_InitStruct.CompareValue = 50;
+ 80012f2:	2332      	movs	r3, #50	; 0x32
  80012f4:	62bb      	str	r3, [r7, #40]	; 0x28
   TIM_OC_InitStruct.OCPolarity = LL_TIM_OCPOLARITY_HIGH;
  80012f6:	2300      	movs	r3, #0
