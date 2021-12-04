@@ -175,10 +175,12 @@ void pwmToLed(uint8_t* sign,uint16_t len){
 		str[j] = *(sign+j);
 	}
 	char breakset[] = "0123456789";
-	wantedDutyCycle = atoi(strpbrk(str, breakset));
-	int len_data = asprintf(&tx_data, "The brightness is set to: : %d %\n\r",wantedDutyCycle);
-									sendData(tx_data,len_data);
-									free(tx_data);
+	if(strstr(str,"$PWM")){
+		wantedDutyCycle = atoi(strpbrk(str, breakset));
+		int len_data = asprintf(&tx_data, "The brightness is set to: : %d %\n\r",wantedDutyCycle);
+		sendData(tx_data,len_data);
+		free(tx_data);
+	}
 }
 
 void checkMode(uint8_t* sign,uint16_t len){
